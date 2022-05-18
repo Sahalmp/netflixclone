@@ -1,6 +1,8 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:netflixclone/application/downloads/downloads_bloc.dart';
 import 'package:netflixclone/core/colors/colors.dart';
 import 'package:netflixclone/core/constants.dart';
 import 'package:netflixclone/presentation/widgets/app_bar_widget.dart';
@@ -97,13 +99,12 @@ class Section2 extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
-  final imagelist = [
-    "https://www.themoviedb.org/t/p/original/u9fvqenMMyeyWjIWFRxjnfJvD1N.jpg",
-    "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/fSsawoANheEFQrDXvsLc5jWKNt1.jpg",
-    "https://www.themoviedb.org/t/p/original/6xNdRj4jK8R7FWX93d2uEshJXMS.jpg",
-  ];
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      BlocProvider.of<DownloadsBloc>(context)
+          .add(const DownloadsEvent.getDownloadsImage());
+    });
     final size = MediaQuery.of(context).size;
 
     return Column(
@@ -126,35 +127,46 @@ class Section2 extends StatelessWidget {
         ),
         Kheight,
         Kheight,
-        Stack(
-          alignment: Alignment.center,
-          children: [
-            CircleAvatar(
-              backgroundColor: Colors.white.withOpacity(0.2),
-              radius: size.width * 0.32,
-            ),
-            DownloadsImageWidget(
-              margin: const EdgeInsets.only(right: 150, bottom: 35, top: 20),
-              imageurl: imagelist[0],
-              rotation: -20,
-              size: Size(
-                size.width * 0.33,
-                size.width * 0.43,
-              ),
-            ),
-            DownloadsImageWidget(
-              margin: const EdgeInsets.only(left: 150, bottom: 35, top: 20),
-              imageurl: imagelist[2],
-              rotation: 20,
-              size: Size(size.width * 0.33, size.width * 0.45),
-            ),
-            DownloadsImageWidget(
-              margin: EdgeInsets.only(top: 20),
-              imageurl: imagelist[1],
-              rotation: 0,
-              size: Size(size.width * 0.33, size.width * 0.5),
-            ),
-          ],
+        BlocBuilder<DownloadsBloc, DownloadsState>(
+          builder: (context, state) {
+            return state.isLoading == true || state.downloads.isEmpty
+                ? const CircularProgressIndicator()
+                : Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      CircleAvatar(
+                        backgroundColor: Colors.white.withOpacity(0.2),
+                        radius: size.width * 0.32,
+                      ),
+                      DownloadsImageWidget(
+                        margin: const EdgeInsets.only(
+                            right: 150, bottom: 35, top: 20),
+                        imageurl:
+                            '$imageAppendUrl/${state.downloads[0].posterPath}',
+                        rotation: -20,
+                        size: Size(
+                          size.width * 0.33,
+                          size.width * 0.43,
+                        ),
+                      ),
+                      DownloadsImageWidget(
+                        margin: const EdgeInsets.only(
+                            left: 150, bottom: 35, top: 20),
+                        imageurl:
+                            '$imageAppendUrl/${state.downloads[1].posterPath}',
+                        rotation: 20,
+                        size: Size(size.width * 0.33, size.width * 0.45),
+                      ),
+                      DownloadsImageWidget(
+                        margin: EdgeInsets.only(top: 20),
+                        imageurl:
+                            '$imageAppendUrl/${state.downloads[2].posterPath}',
+                        rotation: 0,
+                        size: Size(size.width * 0.33, size.width * 0.5),
+                      ),
+                    ],
+                  );
+          },
         ),
       ],
     );
