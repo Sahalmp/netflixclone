@@ -7,6 +7,9 @@ import 'package:netflixclone/presentation/search/widgets/search_idle.dart';
 
 import '../../core/constants.dart';
 
+const _imageUrl =
+    "https://www.themoviedb.org/t/p/original/u9fvqenMMyeyWjIWFRxjnfJvD1N.jpg";
+
 class ScreenNewsAndHot extends StatelessWidget {
   const ScreenNewsAndHot({Key? key}) : super(key: key);
 
@@ -112,7 +115,7 @@ class BuildEveryOneWatching extends StatelessWidget {
                                     decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(10),
                                         image: const DecorationImage(
-                                            image: NetworkImage(imageUrl),
+                                            image: NetworkImage(_imageUrl),
                                             fit: BoxFit.cover)),
                                     width: double.infinity,
                                     height: 200,
@@ -264,8 +267,8 @@ class BuildCommingSoon extends StatelessWidget {
                               Container(
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(10),
-                                    image: const DecorationImage(
-                                        image: NetworkImage(imageUrl),
+                                    image: DecorationImage(
+                                        image: NetworkImage(_imageUrl),
                                         fit: BoxFit.cover)),
                                 width: double.infinity,
                                 height: 225,

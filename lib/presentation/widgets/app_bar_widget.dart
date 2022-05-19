@@ -30,7 +30,6 @@ class AppBarWidget extends StatelessWidget {
         ),
         kwidth,
       ],
-      
     );
   }
 }

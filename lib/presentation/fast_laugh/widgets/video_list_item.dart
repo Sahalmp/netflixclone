@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:netflixclone/core/colors/colors.dart';
 import 'package:netflixclone/core/constants.dart';
 import 'package:netflixclone/presentation/search/widgets/search_idle.dart';
-
+const _imageUrl =
+    "https://www.themoviedb.org/t/p/original/u9fvqenMMyeyWjIWFRxjnfJvD1N.jpg";
 class VideoListItem extends StatelessWidget {
   final index;
   const VideoListItem({Key? key, required this.index}) : super(key: key);
@@ -40,7 +41,7 @@ class VideoListItem extends StatelessWidget {
                         CircleAvatar(
                           radius: 25,
                           backgroundImage: NetworkImage(
-                            imageUrl,
+                            _imageUrl,
                           ),
                         ),
                         Kheight30,
