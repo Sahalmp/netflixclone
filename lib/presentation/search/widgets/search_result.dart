@@ -61,7 +61,7 @@ class SearchResultWidget extends StatelessWidget {
                       separatorBuilder: (context, index) {
                         return Kheight20;
                       },
-                      itemCount: 10);
+                      itemCount: state.searchResultList.length.clamp(0, 18));
                 },
               )
             ],

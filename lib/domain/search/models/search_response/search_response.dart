@@ -19,7 +19,6 @@ class SearchResponse {
 
 @JsonSerializable()
 class SearchResultData {
- 
   @JsonKey(name: 'id')
   int? id;
 
@@ -30,8 +29,6 @@ class SearchResultData {
   String? posterPath;
 
   SearchResultData({
-    
-
     this.id,
     this.originalTitle,
     this.posterPath,

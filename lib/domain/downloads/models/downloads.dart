@@ -8,6 +8,9 @@ class Downloads with _$Downloads {
     @JsonKey(name: 'backdrop_path') String? backdropPath,
     @JsonKey(name: "poster_path") required String? posterPath,
     @JsonKey(name: "title") required String? title,
+    @JsonKey(name: "original_title") required String? originaltitle,
+    @JsonKey(name: "name") required String? name,
+    @JsonKey(name: "original_name") required String? originalname,
   }) = _Downloads;
 
   factory Downloads.fromJson(Map<String, dynamic> json) =>

@@ -5,20 +5,24 @@ import 'home_page_card.dart';
 import 'title.dart';
 
 class HomeCardTitle extends StatelessWidget {
-  final title;
   const HomeCardTitle({
-    Key? key,
+    required this.posterList,
     required this.title,
+    Key? key,
   }) : super(key: key);
-
+  final List<String> posterList;
+  final title;
   @override
   Widget build(BuildContext context) {
+    posterList.shuffle();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         HomePageTitle(title: title),
         Kheight,
-        HomePageCard(),
+        HomePageCard(
+          posterList: posterList,
+        ),
       ],
     );
   }

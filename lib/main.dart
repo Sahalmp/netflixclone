@@ -7,6 +7,9 @@ import 'package:netflixclone/domain/core/di/injectable.dart';
 import 'package:netflixclone/presentation/main_page/screen_main_page.dart';
 
 import 'application/Search/search_bloc.dart';
+import 'application/fastlaugh/fastlaugh_bloc.dart';
+import 'application/home/home_bloc.dart';
+import 'application/newandhot/bloc/hotandnew_bloc.dart';
 
 Future<void> main(List<String> args) async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,7 +25,11 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => getIt<DownloadsBloc>()),
-        BlocProvider(create: (context) => getIt<SearchBloc>())
+        BlocProvider(create: (context) => getIt<SearchBloc>()),
+        BlocProvider(create: (context) => getIt<FastlaughBloc>()),
+        BlocProvider(create: (context) => getIt<HotandnewBloc>()),
+                BlocProvider(create: (context) => getIt<HomeBloc>()),
+
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

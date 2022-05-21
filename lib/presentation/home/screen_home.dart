@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:netflixclone/application/home/home_bloc.dart';
 import 'package:netflixclone/core/colors/colors.dart';
 import 'package:netflixclone/core/constants.dart';
 import 'package:netflixclone/presentation/home/widgets/background_card.dart';
-import 'package:netflixclone/presentation/home/widgets/home_page_card.dart';
 import 'package:netflixclone/presentation/home/widgets/home_page_card_title.dart';
 import 'package:netflixclone/presentation/home/widgets/number_card.dart';
 import 'package:netflixclone/presentation/home/widgets/title.dart';
-import 'package:netflixclone/presentation/search/widgets/search_idle.dart';
 
 ValueNotifier<bool> scrollNotifier = ValueNotifier(true);
 
@@ -16,6 +16,11 @@ class ScreenHome extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      BlocProvider.of<HomeBloc>(context).add(const Gethomescreendata());
+      BlocProvider.of<HomeBloc>(context).add(const Gethomescreendata());
+    });
+
     final Size size = MediaQuery.of(context).size;
     return Scaffold(
         body: ValueListenableBuilder(
@@ -44,39 +49,92 @@ class ScreenHome extends StatelessWidget {
                         children: [
                           Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: const [
-                                BackgroundCard(),
-                                Kheight20,
-                                HomeCardTitle(
-                                  title: 'Top Netflix Movies',
-                                ),
-                                Kheight,
-                                HomeCardTitle(
-                                  title: 'Trending Now',
-                                ),
-                                Kheight,
-                                HomeCardTitle(
-                                  title: 'TV Shows Based on Books',
-                                ),
-                                Kheight,
-                                HomeCardTitle(
-                                  title: 'New Releases',
-                                ),
-                                Kheight,
-                                HomeCardTitle(
-                                  title: 'TV Dramas',
-                                ),
-                                Kheight,
-                                HomePageTitle(title: 'Top 10 in Indian Today'),
-                                Kheight,
-                                HomeNumberCard(),
-                                Kheight,
-                                HomeCardTitle(
-                                  title: 'US Movies',
-                                ),
-                              ],
+                            child: BlocBuilder<HomeBloc, HomeState>(
+                              builder: (context, state) {
+                                
+                                      
+
+                                if (state.isLoading) {
+                                  return const Center(
+                                    child: CircularProgressIndicator(
+                                        strokeWidth: 2),
+                                  );
+                                } else if (state.hasError) {
+                                  return const Center(
+                                    child: Text('Error Getting Data '),
+                                  );
+                                }
+                                final _topnetflixMovies =
+                                    state.topnetflixmovieslist.map((m) {
+                                  return '$imageAppendUrl${m.posterPath}';
+                                }).toList();
+                                final _trendingnow =
+                                    state.trendingnowlist.map((m) {
+                                  return '$imageAppendUrl${m.posterPath}';
+                                }).toList();
+                                final _tvshowsbasedonbooks =
+                                    state.tvshowsbasedonbookslist.map((m) {
+                                  return '$imageAppendUrl${m.posterPath}';
+                                }).toList();
+                                final _usmovies = state.usmovielist.map((m) {
+                                  return '$imageAppendUrl${m.posterPath}';
+                                }).toList();
+                                final _top10 = state.top10list.map((m) {
+                                  return '$imageAppendUrl${m.posterPath}';
+                                }).toList();
+                                final newreleases =
+                                    state.newreleaseslist.map((m) {
+                                  return '$imageAppendUrl${m.posterPath}';
+                                }).toList();
+                                final _tvdramas = state.tvdramaslist.map((m) {
+                                  return '$imageAppendUrl${m.posterPath}';
+                                }).toList();
+
+                                return Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    BackgroundCard(
+                                      posterPath: _top10[0],
+                                    ),
+                                    Kheight20,
+                                    HomeCardTitle(
+                                      title: 'Top Netflix Movies',
+                                      posterList: _topnetflixMovies,
+                                    ),
+                                    Kheight,
+                                    HomeCardTitle(
+                                      title: 'Trending Now',
+                                      posterList: _trendingnow.sublist(0, 10),
+                                    ),
+                                    Kheight,
+                                    HomeCardTitle(
+                                      title: 'TV Shows Based on Books',
+                                      posterList: _tvshowsbasedonbooks,
+                                    ),
+                                    Kheight,
+                                    HomeCardTitle(
+                                      title: 'New Releases',
+                                      posterList: newreleases.sublist(0, 10),
+                                    ),
+                                    Kheight,
+                                    HomeCardTitle(
+                                      title: 'TV Dramas',
+                                      posterList: _tvdramas,
+                                    ),
+                                    Kheight,
+                                    const HomePageTitle(title: 'Top 10 Today'),
+                                    Kheight,
+                                    HomeNumberCard(
+                                      posterpath: _top10,
+                                    ),
+                                    Kheight,
+                                    HomeCardTitle(
+                                      title: 'US Movies',
+                                      posterList: _usmovies.sublist(0, 10),
+                                    ),
+                                  ],
+                                );
+                              },
                             ),
                           ),
                         ],
@@ -114,7 +172,6 @@ class ScreenHome extends StatelessWidget {
                                       Container(
                                         height: 24,
                                         width: 24,
-                                        color: Colors.blue,
                                         child: Image.asset(
                                           "asset/images/profileavatar.jpg",
                                           fit: BoxFit.cover,

@@ -9,7 +9,7 @@ import '../../domain/core/debounce/debounce.dart';
 
 class ScreenSearch extends StatelessWidget {
   ScreenSearch({Key? key}) : super(key: key);
-  final _debouncer = Debouncer(milliseconds: 750) ;
+  final _debouncer = Debouncer(milliseconds: 750);
 
   @override
   Widget build(BuildContext context) {

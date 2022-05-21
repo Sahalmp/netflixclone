@@ -3,11 +3,12 @@ import 'package:flutter/material.dart';
 import '../../../core/colors/colors.dart';
 import '../screen_home.dart';
 
-const _imageUrl =
-    "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/iwnQ1JH1wdWrGYkgWySptJ5284A.jpg";
+// const _imageUrl =
+//     "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/iwnQ1JH1wdWrGYkgWySptJ5284A.jpg";
 
 class BackgroundCard extends StatelessWidget {
-  const BackgroundCard({Key? key}) : super(key: key);
+  final String posterPath;
+  const BackgroundCard({required this.posterPath, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -16,9 +17,9 @@ class BackgroundCard extends StatelessWidget {
         Container(
           width: double.infinity,
           height: 600,
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
               image: DecorationImage(
-                  image: NetworkImage(_imageUrl), fit: BoxFit.cover)),
+                  image: NetworkImage(posterPath), fit: BoxFit.cover)),
         ),
         Positioned(
           bottom: 0,

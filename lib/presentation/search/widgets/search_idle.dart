@@ -16,7 +16,7 @@ class SearchIdleWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Kheight,
-        SearchTitle(searchtitle: 'Top Searches'),
+        const SearchTitle(searchtitle: 'Top Searches'),
         Kheight,
         Expanded(
           child: BlocBuilder<SearchBloc, SearchState>(
@@ -41,7 +41,11 @@ class SearchIdleWidget extends StatelessWidget {
                     final movie = state.idleList[index];
                     return TopSearchItemTile(
                       imageUrl: '$imageAppendUrl${movie.backdropPath}',
-                      title: movie.title ?? "No title provided",
+                      title: movie.title ??
+                          movie.originalname ??
+                          movie.name ??
+                          movie.originaltitle ??
+                          "No title Provided",
                     );
                   },
                   separatorBuilder: (context, index) {
