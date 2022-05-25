@@ -23,6 +23,7 @@ class HomePageCard extends StatelessWidget {
         itemBuilder: (context, index) => Column(
           children: [
             GestureDetector(
+             
               child: Container(
                 width: size.width * 0.27,
                 height: size.width * 0.4,

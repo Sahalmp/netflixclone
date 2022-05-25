@@ -10,14 +10,14 @@ part 'home_bloc.freezed.dart';
 
 @injectable
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
-  HotAndNewService _homeservice;
-  HomeBloc(this._homeservice) : super(HomeState.initial()) {
+  HotAndNewService homeservice;
+  HomeBloc(this.homeservice) : super(HomeState.initial()) {
     on<Gethomescreendata>((event, emit) async {
       emit(state.copyWith(isLoading: true, hasError: false));
-      var id = 0;
+     
       final _movieresult =
-          await _homeservice.getHotAndNewMovieData(page: '$id++');
-      final _tvresult = await _homeservice.getHotAndNewTVData();
+          await homeservice.getHotAndNewMovieData();
+      final _tvresult = await homeservice.getHotAndNewTVData();
       final _state1 = _movieresult.fold(
         (f) => HomeState(
           topnetflixmovieslist: [],

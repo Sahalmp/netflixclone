@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:netflixclone/application/home/home_bloc.dart';
 import 'package:netflixclone/core/colors/colors.dart';
 import 'package:netflixclone/core/constants.dart';
 import 'package:netflixclone/presentation/home/widgets/background_card.dart';
 import 'package:netflixclone/presentation/home/widgets/home_page_card_title.dart';
 import 'package:netflixclone/presentation/home/widgets/number_card.dart';
+import 'package:netflixclone/presentation/home/widgets/recentlyplayedcard.dart';
 import 'package:netflixclone/presentation/home/widgets/title.dart';
 
 ValueNotifier<bool> scrollNotifier = ValueNotifier(true);
@@ -18,10 +20,8 @@ class ScreenHome extends StatelessWidget {
   Widget build(BuildContext context) {
     WidgetsBinding.instance!.addPostFrameCallback((_) {
       BlocProvider.of<HomeBloc>(context).add(const Gethomescreendata());
-      BlocProvider.of<HomeBloc>(context).add(const Gethomescreendata());
     });
 
-    final Size size = MediaQuery.of(context).size;
     return Scaffold(
         body: ValueListenableBuilder(
             valueListenable: scrollNotifier,
@@ -51,9 +51,6 @@ class ScreenHome extends StatelessWidget {
                             padding: const EdgeInsets.all(8.0),
                             child: BlocBuilder<HomeBloc, HomeState>(
                               builder: (context, state) {
-                                
-                                      
-
                                 if (state.isLoading) {
                                   return const Center(
                                     child: CircularProgressIndicator(
@@ -97,6 +94,13 @@ class ScreenHome extends StatelessWidget {
                                       posterPath: _top10[0],
                                     ),
                                     Kheight20,
+                                    HomePageTitle(
+                                        title:
+                                            "Continue Watching ${state.newreleaseslist[11].title}"),
+                                    Kheight,
+                                    RecentlyPlayedCard(
+                                        posterList:
+                                            newreleases.sublist(11, 20)),
                                     HomeCardTitle(
                                       title: 'Top Netflix Movies',
                                       posterList: _topnetflixMovies,
@@ -169,7 +173,7 @@ class ScreenHome extends StatelessWidget {
                                           icon: const Icon(Icons.cast,
                                               color: Colors.white)),
                                       kwidth,
-                                      Container(
+                                      SizedBox(
                                         height: 24,
                                         width: 24,
                                         child: Image.asset(
@@ -193,15 +197,21 @@ class ScreenHome extends StatelessWidget {
                                           style: TextStyle(
                                               fontWeight: FontWeight.w500)),
                                       LimitedBox(
-                                        child: Row(children: const [
-                                          Text("Categories",
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.w500)),
-                                          Icon(
-                                            Icons.arrow_drop_down_rounded,
-                                            color: color_white,
-                                          )
-                                        ]),
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            _showCategoriesList(context);
+                                          },
+                                          child: Row(children: const [
+                                            Text("Categories",
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.w500)),
+                                            Icon(
+                                              Icons.arrow_drop_down_rounded,
+                                              color: color_white,
+                                            )
+                                          ]),
+                                        ),
                                       )
                                     ],
                                   )
@@ -247,3 +257,105 @@ class CustomButtonWidget extends StatelessWidget {
     );
   }
 }
+
+Future<Object?> _showCategoriesList(BuildContext context) {
+  return showGeneralDialog(
+    context: context,
+    pageBuilder: (context, animation, secondaryAnimation) => Scaffold(
+      backgroundColor: Colors.black.withOpacity(.8),
+      body: Column(
+        children: const [
+          SizedBox(height: 50),
+          CategoriesListWidget(),
+          SizedBox(height: 20),
+          ClossButtonWidget(),
+          SizedBox(height: 30)
+        ],
+      ),
+    ),
+  );
+}
+
+class CategoriesListWidget extends StatelessWidget {
+  const CategoriesListWidget({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: ListView.separated(
+        shrinkWrap: true,
+        itemBuilder: (BuildContext _context, int _index) {
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                homeCategories[_index],
+                style: GoogleFonts.rubik(
+                  fontSize: 18,
+                  color: Colors.grey,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ],
+          );
+        },
+        separatorBuilder: (BuildContext _cx, int _indx) {
+          return const SizedBox(height: 35);
+        },
+        itemCount: 20,
+      ),
+    );
+  }
+}
+
+class ClossButtonWidget extends StatelessWidget {
+  const ClossButtonWidget({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return CircleAvatar(
+      child: IconButton(
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
+        icon: const Icon(Icons.close),
+        color: Colors.black,
+      ),
+      backgroundColor: Colors.white,
+      radius: 25,
+    );
+  }
+}
+
+List<String> homeCategories = [
+  'Home',
+  'My List',
+  'Available for Download',
+  'Hindi',
+  'Tamil',
+  'Punjabi',
+  'Telugu',
+  'Malayalam',
+  'Marathi',
+  'Bengali',
+  'English',
+  'Action',
+  'Anime',
+  'Award Winners',
+  'Biographical',
+  'Blockbusters',
+  'Bollywood',
+  'Children & Family',
+  'Comedies',
+  'Documentaries',
+  'Dramas',
+  'Fantasy',
+  'Hollywood',
+  'Hurror',
+  'International',
+  'Indian'
+];
